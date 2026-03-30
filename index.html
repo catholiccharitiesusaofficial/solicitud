@@ -228,12 +228,22 @@ src="https://www.facebook.com/tr?id=1249430960659985&ev=PageView&noscript=1"
         cursor: pointer;
         display: inline-block;
     }
-    #loading-screen, #success-screen {
+    .boton-whatsapp-form {
+        background-color: #25D366 !important;
+        color: white !important;
+        font-weight: bold !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    .boton-whatsapp-form:hover {
+        background-color: #128C7E !important;
+    }
+    #loading-overlay {
         text-align: center;
         padding: 2rem;
-    }
-    #loading-screen p {
-        font-size: 1.5rem;
     }
     .loader {
         border: 8px solid #f3f3f3;
@@ -247,13 +257,6 @@ src="https://www.facebook.com/tr?id=1249430960659985&ev=PageView&noscript=1"
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
-    }
-    #success-screen p:first-child {
-        font-size: 3rem;
-        color: green;
-    }
-    #success-screen h2 {
-        margin: 1rem 0;
     }
     
     /* NUEVOS ESTILOS PARA EL BOTÓN DESTACADO */
@@ -313,7 +316,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="formulario-contenedor">
         <button class="cerrar-btn" onclick="cerrarFormulario()">&times;</button>
         <h2 class="has-h1-variant" style="text-align: center; color: var(--wdg-purple);">Solicita tu asesoría</h2>
-        <p class="has-medium-variant" style="text-align: center;">Completa tus datos y envía tu solicitud a nuestro WhatsApp Oficial.</p>
+        <p class="has-medium-variant" style="text-align: center;">Déjanos tus datos y un Licenciado se pondrá en contacto contigo a la brevedad.</p>
 
         <div id="form-container">
             <form id="asesoriaForm">
@@ -326,32 +329,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <label for="email">Correo electrónico *</label>
                 <input type="email" id="email" name="email" required>
 
-                <label for="telefono">Teléfono de contacto *</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="Ej: 787-965-8614" required pattern="[0-9\-\+\s]{8,20}" title="Solo números, espacios, + y -">
-
                 <label for="caso">Cuéntanos tu caso *</label>
                 <textarea id="caso" name="caso" rows="5" required maxlength="1000"></textarea>
 
                 <div style="text-align: center;">
-                    <button type="button" id="enviarWhatsAppBtn" style="background-color: #25D366; color: white; border: none; padding: 0.75rem 2rem; font-size: 1.2rem; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;">
+                    <button type="button" id="enviarWhatsAppBtn" class="boton-whatsapp-form">
                         <i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp
                     </button>
                 </div>
             </form>
         </div>
 
-        <div id="loading-screen" style="display: none;">
-            <p>Procesando solicitud, por favor espera...</p>
+        <div id="loading-overlay" style="display: none;">
             <div class="loader"></div>
-        </div>
-
-        <div id="success-screen" style="display: none;">
-            <p>✓</p>
-            <h2>¡Solicitud enviada con éxito!</h2>
-            <p>Hemos recibido tu información. Un asesor se pondrá en contacto contigo a la brevedad.</p>
-            <div>
-                <button onclick="cerrarFormulario()" style="background-color: var(--wdg-purple); color: white; border: none; padding: 0.75rem 2rem; border-radius: 4px; cursor: pointer;">Cerrar</button>
-            </div>
+            <p style="margin-top: 1rem; color: var(--wdg-purple);">Procesando tu solicitud...</p>
+            <p style="font-size: 0.8rem;">Por favor, espera un momento</p>
         </div>
     </div>
 </div>
@@ -1143,8 +1135,7 @@ Alexandria, VA 22314</p>
         document.getElementById('formulario-overlay').style.display = 'flex';
         // Resetear el formulario a su estado inicial
         document.getElementById('form-container').style.display = 'block';
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('success-screen').style.display = 'none';
+        document.getElementById('loading-overlay').style.display = 'none';
         document.getElementById('asesoriaForm').reset();
     }
 
@@ -1170,25 +1161,24 @@ Alexandria, VA 22314</p>
         window.open(url, '_blank');
     }
 
-    // NUEVO: Envío a WhatsApp sin servidor
+    // NUEVO: Envío a WhatsApp con pantalla de carga
     document.getElementById('enviarWhatsAppBtn').addEventListener('click', function() {
         const nombre = document.getElementById('nombre').value.trim();
         const fechaNacimiento = document.getElementById('fecha_nacimiento').value;
         const email = document.getElementById('email').value.trim();
-        const telefono = document.getElementById('telefono').value.trim();
         const caso = document.getElementById('caso').value.trim();
 
         if (!nombre) { alert('Por favor, ingresa tu nombre completo.'); return; }
         if (!fechaNacimiento) { alert('Por favor, ingresa tu fecha de nacimiento.'); return; }
         if (!email) { alert('Por favor, ingresa tu correo electrónico.'); return; }
-        if (!telefono) { alert('Por favor, ingresa tu teléfono de contacto.'); return; }
         if (!caso) { alert('Por favor, describe brevemente tu caso.'); return; }
 
         const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
         if (!emailRegex.test(email)) { alert('Por favor, ingresa un correo electrónico válido.'); return; }
 
-        const telefonoRegex = /^[0-9\-\+\s]{8,20}$/;
-        if (!telefonoRegex.test(telefono)) { alert('Por favor, ingresa un número de teléfono válido.'); return; }
+        // Ocultar formulario, mostrar pantalla de carga
+        document.getElementById('form-container').style.display = 'none';
+        document.getElementById('loading-overlay').style.display = 'block';
 
         const fechaFormateada = fechaNacimiento.split('-').reverse().join('/');
 
@@ -1196,25 +1186,25 @@ Alexandria, VA 22314</p>
             `*Nombre:* ${encodeURIComponent(nombre)}%0A` +
             `*Fecha de nacimiento:* ${encodeURIComponent(fechaFormateada)}%0A` +
             `*Correo:* ${encodeURIComponent(email)}%0A` +
-            `*Teléfono:* ${encodeURIComponent(telefono)}%0A` +
             `*Caso:* ${encodeURIComponent(caso)}%0A%0A` +
             `*Enviado desde:* ${encodeURIComponent(window.location.href)}`;
 
         const numeroWhatsAppOficial = '17879658614';
         const urlWhatsApp = `https://wa.me/${numeroWhatsAppOficial}?text=${mensajeWhatsApp}`;
         
-        // Disparar evento de registro completado
+        // Disparar evento de registro completado (se ejecuta inmediatamente)
         fbq('track', 'CompleteRegistration', {
             content_name: 'Solicitud de Asesoría Migratoria',
             content_category: 'Formulario WhatsApp',
             nombre: nombre,
-            email: email,
-            telefono: telefono
+            email: email
         });
         
-        window.open(urlWhatsApp, '_blank');
-        cerrarFormulario();
-        alert('Tu solicitud ha sido preparada. Se abrirá WhatsApp para que confirmes el envío.');
+        // Pequeño retraso para asegurar que el evento se envíe antes de abrir WhatsApp
+        setTimeout(function() {
+            window.open(urlWhatsApp, '_blank');
+            cerrarFormulario();
+        }, 500);
     });
 </script>
 </body>
