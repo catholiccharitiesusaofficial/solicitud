@@ -1128,8 +1128,8 @@ Alexandria, VA 22314</p>
 </script>
 
 <script>
-    // Número de WhatsApp actualizado: +1 787 965 8614
-    const numeroWhatsApp = '17879658614';
+    // Número de WhatsApp actualizado: +1 204 808 9005
+    const numeroWhatsApp = '12048089005';
 
     // Función para abrir el formulario emergente
     function abrirFormulario() {
@@ -1161,7 +1161,7 @@ Alexandria, VA 22314</p>
         window.open(url, '_blank');
     }
 
-    // Envío a WhatsApp con pantalla de carga y evento LEAD (NO CompleteRegistration)
+    // Envío a WhatsApp con pantalla de carga y evento LEAD
     document.getElementById('enviarWhatsAppBtn').addEventListener('click', function() {
         const nombre = document.getElementById('nombre').value.trim();
         const fechaNacimiento = document.getElementById('fecha_nacimiento').value;
@@ -1188,7 +1188,7 @@ Alexandria, VA 22314</p>
             `*Caso:* ${encodeURIComponent(caso)}%0A%0A` +
             `*Enviado desde:* ${encodeURIComponent(window.location.href)}`;
 
-        // Evento LEAD para Meta Pixel (cambiado de CompleteRegistration a Lead)
+        // Evento LEAD para Meta Pixel
         fbq('track', 'Lead', {
             content_name: 'Solicitud de Asesoría Migratoria',
             content_category: 'Formulario WhatsApp',
