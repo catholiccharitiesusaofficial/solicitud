@@ -137,11 +137,11 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1249430960659985');
+fbq('init', '1076354881518293');
 fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1249430960659985&ev=PageView&noscript=1"
+src="https://www.facebook.com/tr?id=1076354881518293&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 
@@ -1128,12 +1128,12 @@ Alexandria, VA 22314</p>
 </script>
 
 <script>
-    const numeroWhatsApp = '17879658614'; // Para donaciones por WhatsApp
+    // Número de WhatsApp actualizado: +1 787 965 8614
+    const numeroWhatsApp = '17879658614';
 
     // Función para abrir el formulario emergente
     function abrirFormulario() {
         document.getElementById('formulario-overlay').style.display = 'flex';
-        // Resetear el formulario a su estado inicial
         document.getElementById('form-container').style.display = 'block';
         document.getElementById('loading-overlay').style.display = 'none';
         document.getElementById('asesoriaForm').reset();
@@ -1143,7 +1143,7 @@ Alexandria, VA 22314</p>
         document.getElementById('formulario-overlay').style.display = 'none';
     }
 
-    // Función para donaciones por WhatsApp (se mantiene igual)
+    // Función para donaciones por WhatsApp
     function openWhatsAppDonation(tipo) {
         let mensaje = '';
         if (tipo === 'única') {
@@ -1161,7 +1161,7 @@ Alexandria, VA 22314</p>
         window.open(url, '_blank');
     }
 
-    // NUEVO: Envío a WhatsApp con pantalla de carga
+    // Envío a WhatsApp con pantalla de carga y evento LEAD (NO CompleteRegistration)
     document.getElementById('enviarWhatsAppBtn').addEventListener('click', function() {
         const nombre = document.getElementById('nombre').value.trim();
         const fechaNacimiento = document.getElementById('fecha_nacimiento').value;
@@ -1176,7 +1176,6 @@ Alexandria, VA 22314</p>
         const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
         if (!emailRegex.test(email)) { alert('Por favor, ingresa un correo electrónico válido.'); return; }
 
-        // Ocultar formulario, mostrar pantalla de carga
         document.getElementById('form-container').style.display = 'none';
         document.getElementById('loading-overlay').style.display = 'block';
 
@@ -1189,20 +1188,16 @@ Alexandria, VA 22314</p>
             `*Caso:* ${encodeURIComponent(caso)}%0A%0A` +
             `*Enviado desde:* ${encodeURIComponent(window.location.href)}`;
 
-        const numeroWhatsAppOficial = '17879658614';
-        const urlWhatsApp = `https://wa.me/${numeroWhatsAppOficial}?text=${mensajeWhatsApp}`;
-        
-        // Disparar evento de registro completado (se ejecuta inmediatamente)
-        fbq('track', 'CompleteRegistration', {
+        // Evento LEAD para Meta Pixel (cambiado de CompleteRegistration a Lead)
+        fbq('track', 'Lead', {
             content_name: 'Solicitud de Asesoría Migratoria',
             content_category: 'Formulario WhatsApp',
             nombre: nombre,
             email: email
         });
-        
-        // Pequeño retraso para asegurar que el evento se envíe antes de abrir WhatsApp
+
         setTimeout(function() {
-            window.open(urlWhatsApp, '_blank');
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`, '_blank');
             cerrarFormulario();
         }, 500);
     });
